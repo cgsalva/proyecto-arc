@@ -1,41 +1,18 @@
-# Quasar App (proyecto-arc)
+# PROYECTO ARC 2024
 
-A Quasar Project
+Calidad del agua | Proyecto ARC 2024
 
-## Install the dependencies
+## Instalar las dependencias
 ```bash
 yarn
-# or
-npm install
 ```
 
-### Start the app in development mode (hot-code reloading, error reporting, etc.)
+### Iniciar la aplicación en modo de desarrollo.
 ```bash
-quasar dev
+yarn quasar dev
 ```
 
-
-### Lint the files
+### Crear la aplicación para producción
 ```bash
-yarn lint
-# or
-npm run lint
+yarn quasar build
 ```
-
-
-### Format the files
-```bash
-yarn format
-# or
-npm run format
-```
-
-
-
-### Build the app for production
-```bash
-quasar build
-```
-
-### Customize the configuration
-See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-config-js).

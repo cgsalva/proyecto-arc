@@ -2,7 +2,7 @@
 
 Calidad del agua | Proyecto ARC 2024
 
-## Instalar las dependencias
+### Instalar las dependencias
 ```bash
 yarn
 ```

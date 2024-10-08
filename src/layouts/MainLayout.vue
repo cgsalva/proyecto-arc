@@ -1,7 +1,7 @@
 <template>
   <q-layout view="hHh lpR fFf" class="bg-grey-1">
-    <q-header elevated class="bg-white text-grey-8 q-py-xs" height-hint="58">
-      <q-toolbar>
+    <q-header elevated class="bg-white text-grey-8" height-hint="64">
+      <q-toolbar class="GNL__toolbar">
         <q-btn
           flat
           dense
@@ -9,33 +9,80 @@
           @click="toggleLeftDrawer"
           aria-label="Menu"
           icon="menu"
+          class="q-mr-sm"
         />
 
-        <q-btn flat no-caps no-wrap class="q-ml-xs" v-if="$q.screen.gt.xs">
-          <q-icon :name="fabYoutube" color="red" size="28px" />
-          <q-toolbar-title shrink class="text-weight-bold">
-            YouTube
-          </q-toolbar-title>
-        </q-btn>
+        <q-toolbar-title v-if="$q.screen.gt.xs" shrink class="row items-center no-wrap">
+          <img src="https://cdn.quasar.dev/img/layout-gallery/logo-google.svg">
+          <span class="q-ml-sm">News</span>
+        </q-toolbar-title>
 
         <q-space />
 
-        <div class="YL__toolbar-input-container row no-wrap">
-          <q-input dense outlined square v-model="search" placeholder="Search" class="bg-white col" />
-          <q-btn class="YL__toolbar-input-btn" color="grey-3" text-color="grey-8" icon="search" unelevated />
-        </div>
+        <q-input class="GNL__toolbar-input" outlined dense v-model="search" color="bg-grey-7 shadow-1" placeholder="Search for topics, locations & sources">
+          <template v-slot:prepend>
+            <q-icon v-if="search === ''" name="search" />
+            <q-icon v-else name="clear" class="cursor-pointer" @click="search = ''" />
+          </template>
+          <template v-slot:append>
+            <q-btn
+              flat
+              dense
+              round
+              aria-label="Menu"
+              icon="arrow_drop_down"
+            >
+              <q-menu anchor="bottom end" self="top end">
+                <div class="q-pa-md" style="width: 400px">
+                  <div class="text-body2 text-grey q-mb-md">
+                    Narrow your search results
+                  </div>
+
+                  <div class="row items-center">
+                    <div class="col-3 text-subtitle2 text-grey">
+                      Exact phrase
+                    </div>
+                    <div class="col-9 q-pl-md">
+                      <q-input dense v-model="exactPhrase" />
+                    </div>
+
+                    <div class="col-3 text-subtitle2 text-grey">
+                      Has words
+                    </div>
+                    <div class="col-9 q-pl-md">
+                      <q-input dense v-model="hasWords" />
+                    </div>
+
+                    <div class="col-3 text-subtitle2 text-grey">
+                      Exclude words
+                    </div>
+                    <div class="col-9 q-pl-md">
+                      <q-input dense v-model="excludeWords" />
+                    </div>
+
+                    <div class="col-3 text-subtitle2 text-grey">
+                      Website
+                    </div>
+                    <div class="col-9 q-pl-md">
+                      <q-input dense v-model="byWebsite" />
+                    </div>
+
+                    <div class="col-12 q-pt-lg row justify-end">
+                      <q-btn flat dense no-caps color="grey-7" size="md" style="min-width: 68px;" label="Search" v-close-popup />
+                      <q-btn flat dense no-caps color="grey-7" size="md" style="min-width: 68px;" @click="onClear" label="Clear" v-close-popup />
+                    </div>
+                  </div>
+                </div>
+              </q-menu>
+            </q-btn>
+          </template>
+        </q-input>
 
         <q-space />
 
         <div class="q-gutter-sm row items-center no-wrap">
-          <q-btn round dense flat color="grey-8" icon="video_call" v-if="$q.screen.gt.sm">
-            <q-tooltip>Create a video or post</q-tooltip>
-          </q-btn>
-          <q-btn round dense flat color="grey-8" icon="apps" v-if="$q.screen.gt.sm">
-            <q-tooltip>Apps</q-tooltip>
-          </q-btn>
-          <q-btn round dense flat color="grey-8" icon="message" v-if="$q.screen.gt.sm">
-            <q-tooltip>Messages</q-tooltip>
+          <q-btn v-if="$q.screen.gt.sm" round dense flat color="text-grey-7" icon="apps">
+            <q-tooltip>Google Apps</q-tooltip>
           </q-btn>
           <q-btn round dense flat color="grey-8" icon="notifications">
             <q-badge color="red" text-color="white" floating>
@@ -57,83 +104,41 @@
       v-model="leftDrawerOpen"
       show-if-above
       bordered
-      class="bg-grey-2"
-      :width="240"
+      class="bg-white"
+      :width="280"
     >
       <q-scroll-area class="fit">
-        <q-list padding>
-          <q-item v-for="link in links1" :key="link.text" v-ripple clickable>
+        <q-list padding class="text-grey-8">
+          <q-item class="GNL__drawer-item" v-ripple clickable>
             <q-item-section avatar>
-              <q-icon color="grey" :name="link.icon" />
+              <q-icon name="home" />
             </q-item-section>
             <q-item-section>
-              <q-item-label>{{ link.text }}</q-item-label>
+              <q-item-label>Inicio</q-item-label>
             </q-item-section>
           </q-item>
 
-          <q-separator class="q-my-md" />
-
-          <q-item v-for="link in links2" :key="link.text" v-ripple clickable>
+          <q-item class="GNL__drawer-item" v-ripple clickable>
             <q-item-section avatar>
-              <q-icon color="grey" :name="link.icon" />
+              <q-icon name="article" />
             </q-item-section>
             <q-item-section>
-              <q-item-label>{{ link.text }}</q-item-label>
+              <q-item-label>Registros</q-item-label>
             </q-item-section>
           </q-item>
 
-          <q-separator class="q-mt-md q-mb-xs" />
+          <!--<q-separator inset class="q-my-sm" />-->
 
-          <q-item-label header class="text-weight-bold text-uppercase">
-            More from Youtube
-          </q-item-label>
-
-          <q-item v-for="link in links3" :key="link.text" v-ripple clickable>
+          <q-item class="GNL__drawer-item" v-ripple clickable>
             <q-item-section avatar>
-              <q-icon color="grey" :name="link.icon" />
+              <q-icon name="info" />
             </q-item-section>
             <q-item-section>
-              <q-item-label>{{ link.text }}</q-item-label>
+              <q-item-label>Acerca de</q-item-label>
             </q-item-section>
           </q-item>
 
-          <q-separator class="q-my-md" />
-
-          <q-item v-for="link in links4" :key="link.text" v-ripple clickable>
-            <q-item-section avatar>
-              <q-icon color="grey" :name="link.icon" />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>{{ link.text }}</q-item-label>
-            </q-item-section>
-          </q-item>
-
-          <q-separator class="q-mt-md q-mb-lg" />
-
-          <div class="q-px-md text-grey-9">
-            <div class="row items-center q-gutter-x-sm q-gutter-y-xs">
-              <a
-                v-for="button in buttons1"
-                :key="button.text"
-                class="YL__drawer-footer-link"
-                href="javascript:void(0)"
-              >
-                {{ button.text }}
-              </a>
-            </div>
-          </div>
-          <div class="q-py-md q-px-md text-grey-9">
-            <div class="row items-center q-gutter-x-sm q-gutter-y-xs">
-              <a
-                v-for="button in buttons2"
-                :key="button.text"
-                class="YL__drawer-footer-link"
-                href="javascript:void(0)"
-              >
-                {{ button.text }}
-              </a>
-            </div>
-          </div>
+          <!--<q-separator inset class="q-my-sm" />-->
         </q-list>
       </q-scroll-area>
     </q-drawer>
@@ -146,84 +151,108 @@
 
 <script>
 import { ref } from 'vue'
-import { fabYoutube } from '@quasar/extras/fontawesome-v6'
+import { fasEarthAmericas, fasFlask } from '@quasar/extras/fontawesome-v6'
 
 export default {
-  name: 'MyLayout',
+  name: 'GoogleNewsLayout',
 
   setup () {
     const leftDrawerOpen = ref(false)
     const search = ref('')
+    const showAdvanced = ref(false)
+    const showDateOptions = ref(false)
+    const exactPhrase = ref('')
+    const hasWords = ref('')
+    const excludeWords = ref('')
+    const byWebsite = ref('')
+    const byDate = ref('Any time')
+
+    function onClear () {
+      exactPhrase.value = ''
+      hasWords.value = ''
+      excludeWords.value = ''
+      byWebsite.value = ''
+      byDate.value = 'Any time'
+    }
+
+    function changeDate (option) {
+      byDate.value = option
+      showDateOptions.value = false
+    }
 
     function toggleLeftDrawer () {
       leftDrawerOpen.value = !leftDrawerOpen.value
     }
 
     return {
-      fabYoutube,
-
       leftDrawerOpen,
       search,
-
-      toggleLeftDrawer,
+      showAdvanced,
+      showDateOptions,
+      exactPhrase,
+      hasWords,
+      excludeWords,
+      byWebsite,
+      byDate,
 
       links1: [
-        { icon: 'home', text: 'Home' },
-        { icon: 'whatshot', text: 'Trending' },
-        { icon: 'subscriptions', text: 'Subscriptions' }
+        { icon: 'web', text: 'Top stories' },
+        { icon: 'person', text: 'For you' },
+        { icon: 'star_border', text: 'Favourites' },
+        { icon: 'search', text: 'Saved searches' }
       ],
       links2: [
-        { icon: 'folder', text: 'Library' },
-        { icon: 'restore', text: 'History' },
-        { icon: 'watch_later', text: 'Watch later' },
-        { icon: 'thumb_up_alt', text: 'Liked videos' }
+        { icon: 'flag', text: 'Canada' },
+        { icon: fasEarthAmericas, text: 'World' },
+        { icon: 'place', text: 'Local' },
+        { icon: 'domain', text: 'Business' },
+        { icon: 'memory', text: 'Technology' },
+        { icon: 'local_movies', text: 'Entertainment' },
+        { icon: 'directions_bike', text: 'Sports' },
+        { icon: fasFlask, text: 'Science' },
+        { icon: 'fitness_center', text: 'Health ' }
       ],
       links3: [
-        { icon: fabYoutube, text: 'YouTube Premium' },
-        { icon: 'local_movies', text: 'Movies & Shows' },
-        { icon: 'videogame_asset', text: 'Gaming' },
-        { icon: 'live_tv', text: 'Live' }
+        { icon: '', text: 'Language & region' },
+        { icon: '', text: 'Settings' },
+        { icon: 'open_in_new', text: 'Get the Android app' },
+        { icon: 'open_in_new', text: 'Get the iOS app' },
+        { icon: '', text: 'Send feedback' },
+        { icon: 'open_in_new', text: 'Help' }
       ],
-      links4: [
-        { icon: 'settings', text: 'Settings' },
-        { icon: 'flag', text: 'Report history' },
-        { icon: 'help', text: 'Help' },
-        { icon: 'feedback', text: 'Send feedback' }
-      ],
-      buttons1: [
-        { text: 'About' },
-        { text: 'Press' },
-        { text: 'Copyright' },
-        { text: 'Contact us' },
-        { text: 'Creators' },
-        { text: 'Advertise' },
-        { text: 'Developers' }
-      ],
-      buttons2: [
-        { text: 'Terms' },
-        { text: 'Privacy' },
-        { text: 'Policy & Safety' },
-        { text: 'Test new features' }
-      ]
+
+      onClear,
+      changeDate,
+      toggleLeftDrawer
     }
   }
 }
 </script>
 
 <style lang="sass">
-.YL
+.GNL
 
-  &__toolbar-input-container
-    min-width: 100px
+  &__toolbar
+    height: 64px
+
+  &__toolbar-input
     width: 55%
 
-  &__toolbar-input-btn
-    border-radius: 0
-    border-style: solid
-    border-width: 1px 1px 1px 0
-    border-color: rgba(0,0,0,.24)
-    max-width: 60px
-    width: 100%
+  &__drawer-item
+    line-height: 24px
+    border-radius: 0 24px 24px 0
+    margin-right: 12px
+
+    .q-item__section--avatar
+      .q-icon
+        color: #5f6368
+
+    .q-item__label
+      color: #3c4043
+      letter-spacing: .01785714em
+      font-size: .875rem
+      font-weight: 500
+      line-height: 1.25rem
 
   &__drawer-footer-link
     color: inherit

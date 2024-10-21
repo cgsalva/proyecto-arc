@@ -6,9 +6,9 @@
       </q-toolbar>
       <q-tabs align="center">
         <q-route-tab to="/" icon="home" label="INICIO" />
-        <q-route-tab to="/analizar" icon="autorenew" label="ANALIZAR" />
-        <q-route-tab to="/page3" icon="article" label="RESULTADOS" />
-        <q-route-tab to="/page3" icon="info" label="ACERCA DE" />
+        <q-route-tab to="/new-analysis" icon="autorenew" label="ANALIZAR" />
+        <q-route-tab to="/analysis-results" icon="article" label="RESULTADOS" />
+        <q-route-tab to="/about" icon="info" label="ACERCA DE" />
       </q-tabs>
     </q-header>
     <q-page-container>

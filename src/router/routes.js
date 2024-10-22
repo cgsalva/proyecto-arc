@@ -7,7 +7,6 @@ const routes = [
       { path: 'new-analysis', component: () => import('pages/NewAnalysis.vue') },
       { path: 'analysis-results', component: () => import('pages/AnalysisResults.vue') },
       { path: 'about', component: () => import('pages/AboutTheApp.vue') },
-      
     ]
   },
 

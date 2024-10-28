@@ -32,15 +32,17 @@
 	    <q-dialog v-model="modal">
         <q-card style="width: 1000px; max-width: 80vw;">
           <q-toolbar>
-              <q-toolbar-title>Detalle del resultado</q-toolbar-title>
-              <q-btn flat v-close-popup round dense icon="close" />
-            </q-toolbar>
+            <q-toolbar-title>Detalle del resultado</q-toolbar-title>
+            <q-btn flat v-close-popup round dense size="sm" icon="close" />
+          </q-toolbar>
           <q-separator />
-          <q-card-section class="q-pt-md scroll" style="max-height: 80vh">
+          <q-card-section class="scroll q-pb-lg" style="max-height: 80vh">
             <div class="row">
-              <div class="col q-ma-sm">
+              <div class="col q-mx-md">
+                <p class="text-weight-medium text-subtitle1">Datos de registro</p>
                 <table>
-                  <tr>
+                  <tbody>
+                    <tr class="q-mb-lg">
                     <td><b>Titulo: </b></td>
                     <td>{{rowSelected.titulo}}</td>
                   </tr>
@@ -61,14 +63,19 @@
                     <td><b>Estado: </b></td>
                     <td><q-badge :color="colorBadge(rowSelected.estado)" :label="rowSelected.estado" /></td>
                   </tr>
+                  </tbody>
                 </table>
+                <div class="q-mt-lg">
+                  <q-btn icon="delete" class="q-mr-xs" size="sm" label="ELIMINAR" color="red" />
+                </div>
               </div>
-              <div class="col">
+              <div class="col q-mx-md">
+                <p class="text-weight-medium text-subtitle1">Resultado</p>
                 <div class="q-mb-lg">
                   <span>Ph</span>
                   <q-linear-progress rounded size="20px" value="70%" color="green" class="q-mt-sm">
                     <div class="absolute-full flex flex-center">
-                      <q-badge color="white" text-color="accent" label="9" />
+                      <q-badge color="white" text-color="black" label="9" />
                     </div>
                   </q-linear-progress>
                 </div>
@@ -76,28 +83,28 @@
                   <span>Turbidez</span>
                   <q-linear-progress rounded size="20px" value="40%" color="green" class="q-mt-sm">
                     <div class="absolute-full flex flex-center">
-                      <q-badge color="white" text-color="accent" label="30" />
+                      <q-badge color="white" text-color="black" label="30" />
                     </div>
                   </q-linear-progress>
                 </div>
-                <div>
+                <div class="q-mb-lg">
                   <span>TDS</span>
                   <q-linear-progress rounded size="20px" value="80%" color="red" class="q-mt-sm">
                     <div class="absolute-full flex flex-center">
-                      <q-badge color="white" text-color="accent" label="90" />
+                      <q-badge color="white" text-color="black" label="90" />
                     </div>
                   </q-linear-progress>
                 </div>
+                <q-card class="bg-green text-white">
+                  <q-card-section>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua.
+                  </q-card-section>
+                </q-card>
               </div>
             </div>
-            <q-card class="q-mt-lg bg-green text-white">
-              <q-card-section>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua.
-              </q-card-section>
-            </q-card>
+            
           </q-card-section>
-          <q-separator />
         </q-card>
       </q-dialog>
 	  </div>

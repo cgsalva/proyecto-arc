@@ -29,16 +29,21 @@
 		      </q-tr>
       	</template>
 	    </q-table>
-	    <q-dialog v-model="modal">
-        <q-card style="width: 1000px; max-width: 80vw;">
+	    <q-dialog 
+        v-model="modalDetalleResultado" 
+        maximized 
+        persistent
+        transition-show="slide-up"
+        transition-hide="slide-down"
+        >
+        <q-card style="">
           <q-toolbar>
-            <q-toolbar-title>Detalle del resultado</q-toolbar-title>
+            <q-toolbar-title class="text-center">Detalle del resultado</q-toolbar-title>
             <q-btn flat v-close-popup round dense size="sm" icon="close" />
           </q-toolbar>
-          <q-separator />
-          <q-card-section class="scroll q-pb-lg" style="max-height: 80vh">
+          <q-card-section class="scroll q-pb-lg">
             <div class="row">
-              <div class="col q-mx-md">
+              <div class="col q-px-md q-pb-lg">
                 <p class="text-weight-medium text-subtitle1">Datos de registro</p>
                 <table>
                   <tbody>
@@ -65,11 +70,14 @@
                   </tr>
                   </tbody>
                 </table>
-                <div class="q-mt-lg">
-                  <q-btn icon="delete" class="q-mr-xs" size="sm" label="ELIMINAR" color="red" />
+                <div class="q-mt-lg" v-if="rowSelected.estado == 'Pendiente'">
+                    <q-btn icon="close" class="q-mr-xs" size="sm" label="CANCELAR" color="red" @click="modalConfirmCancel=true" />
+                </div>
+                <div class="q-mt-lg" v-if="rowSelected.estado != 'Pendiente'">
+                    <q-btn icon="delete" class="q-mr-xs" size="sm" label="ELIMINAR" color="red" @click="modalConfirmDelete=true" />
                 </div>
               </div>
-              <div class="col q-mx-md">
+              <div class="col-12 col-md-6 q-px-md q-pb-lg">
                 <p class="text-weight-medium text-subtitle1">Resultado</p>
                 <div class="q-mb-lg">
                   <span>Ph</span>
@@ -103,20 +111,47 @@
                 </q-card>
               </div>
             </div>
-            
           </q-card-section>
         </q-card>
       </q-dialog>
-	  </div>
+      <q-dialog v-model="modalConfirmDelete" persistent>
+        <q-card>
+          <q-card-section class="row items-center">
+            <q-avatar icon="delete_forever" size="lg"  color="red" text-color="white" />
+            <span class="q-ml-sm">¿Estas seguro que deseas eliminar este registro?</span>
+          </q-card-section>
 
+          <q-card-actions align="right">
+            <q-btn flat label="CANCELAR" color="black" v-close-popup />
+            <q-btn flat label="SI" color="black" @click="eliminarRegistro()" v-close-popup />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
+      <q-dialog v-model="modalConfirmCancel" persistent>
+        <q-card>
+          <q-card-section class="row items-center">
+            <q-avatar icon="close" size="lg" color="red" text-color="white" />
+            <span class="q-ml-sm">¿Estas seguro que deseas cancelar este analisis?</span>
+          </q-card-section>
+
+          <q-card-actions align="right">
+            <q-btn flat label="CANCELAR" color="black" v-close-popup />
+            <q-btn flat label="SI" color="black" @click="cancelarAnalisis()" v-close-popup />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
+	  </div>
 	</div>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue'
 
-const modal = ref(false)
 const rowSelected = ref({})
+
+const modalDetalleResultado = ref(false)
+const modalConfirmDelete = ref(false)
+const modalConfirmCancel = ref(false)
 
 const columns = [
   { name: 'titulo', align: 'center', label: 'Titulo', field: 'titulo' },
@@ -176,10 +211,19 @@ const rows = [
   },
 ]
 
+const eliminarRegistro = () => {
+  alert('se eliminaria el registro')
+  modalDetalleResultado.value = false
+}
+
+const cancelarAnalisis = () => {
+  alert('se cancelaria el analisis')
+  modalDetalleResultado.value = false
+}
+
 const onRowClick = (row) => {
 	rowSelected.value = row
-	console.log(rowSelected.value)
-	modal.value=true
+	modalDetalleResultado.value=true
 }
 
 const colorBadge = (estado) => {
@@ -187,6 +231,4 @@ const colorBadge = (estado) => {
 	if (estado == 'Malo') return 'red'
 	if (estado == 'Pendiente') return 'grey'
 }
-
 </script>
-

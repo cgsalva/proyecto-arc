@@ -230,7 +230,7 @@ const cancelarAnalisis = () => {
 
 const onRowClick = (row) => {
 	rowSelected.value = analisis.value.find(analisis => analisis.id === row.id)
-  console.log(rowSelected.value)
+  console.log(rowSelected.value.estado)
 	modalDetalleResultado.value=true
 }
 

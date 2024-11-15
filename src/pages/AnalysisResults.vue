@@ -229,7 +229,8 @@ const cancelarAnalisis = () => {
 }
 
 const onRowClick = (row) => {
-	rowSelected.value = row
+	rowSelected.value = analisis.value.find(analisis => analisis.id === row.id)
+  console.log(rowSelected.value)
 	modalDetalleResultado.value=true
 }
 
@@ -239,13 +240,12 @@ const colorBadge = (estado) => {
 	if (estado == 'Pendiente') return 'grey'
 }
 
+
 const fetchAnalisis = async () => {
   try {
     const analisisCollection = collection(db, 'analisis')
     const analisisSnapshot = await getDocs(analisisCollection)
     analisis.value = analisisSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
-    console.log(analisis.value)
-    console.log(analisis.value[0].id)
   } catch (error) {
     console.error('Error getting documents: ', error)
   }

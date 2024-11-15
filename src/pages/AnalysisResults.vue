@@ -154,6 +154,7 @@ import { db } from 'src/boot/firebase';
 import { ref, computed, onMounted } from 'vue'
 
 const analisis = ref([])
+const analisisPendientes = computed(() => analisis.value.filter(analisis => analisis.estado === 'Pendiente'))
 const rowSelected = ref({})
 
 const modalDetalleResultado = ref(false)
@@ -239,6 +240,7 @@ const colorBadge = (estado) => {
 	if (estado == 'Malo') return 'red'
 	if (estado == 'Pendiente') return 'grey'
 }
+
 
 
 const fetchAnalisis = async () => {

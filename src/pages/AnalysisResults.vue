@@ -57,8 +57,7 @@
                   </tr>
                   <tr>
                     <td><b>Descripcion: </b></td>
-                    <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                    tempor incididunt ut labore et dolore magna aliqua.</td>
+                    <td>{{rowSelected.descripcion}}</td>
                   </tr>
                   <tr>
                     <td><b>Fecha: </b></td>
@@ -167,57 +166,6 @@ const columns = [
   { name: 'estado', align: 'center', label: 'Estado', field: 'estado' }
 ]
 
-const rows = [
-  {
-    titulo: 'Río A',
-    ubicacion: 'Santa Ana',
-    fecha: '01-10-2024',
-    estado: 'Pendiente',
-  },
-  {
-    titulo: 'Río B',
-    ubicacion: 'Santa Ana',
-    fecha: '01-10-2024',
-    estado: 'Malo',
-  },
-  {
-    titulo: 'Lago B',
-    ubicacion: 'Santa Ana',
-    fecha: '02-10-2024',
-    estado: 'Bueno',
-  },
-  {
-    titulo: 'Lago C',
-    ubicacion: 'Santa Ana',
-    fecha: '03-10-2024',
-    estado: 'Bueno',
-  },
-  {
-    titulo: 'Río A',
-    ubicacion: 'Santa Ana',
-    fecha: '01-10-2024',
-    estado: 'Bueno',
-  },
-  {
-    titulo: 'Río B',
-    ubicacion: 'Santa Ana',
-    fecha: '01-10-2024',
-    estado: 'Malo',
-  },
-  {
-    titulo: 'Lago B',
-    ubicacion: 'Santa Ana',
-    fecha: '02-10-2024',
-    estado: 'Bueno',
-  },
-  {
-    titulo: 'Lago C',
-    ubicacion: 'Santa Ana',
-    fecha: '03-10-2024',
-    estado: 'Bueno',
-  },
-]
-
 const eliminarRegistro = () => {
   alert('se eliminaria el registro')
   modalDetalleResultado.value = false
@@ -239,7 +187,6 @@ const colorBadge = (estado) => {
 	if (estado == 'Malo') return 'red'
 	if (estado == 'Pendiente') return 'grey'
 }
-
 
 const fetchAnalisis = async () => {
   try {

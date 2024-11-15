@@ -1,25 +1,29 @@
 <template>
 	<div class="q-pa-md example-row-equal-width">
-    <div class="q-my-md text-h5 text-center">Resultados Detallados</div>
+
+    <div class="flex justify-center">
+      <div class="q-my-md q-mx-sm text-h5 text-center">Resultados Detallados</div>
+      <q-btn flat square @click="fetchAnalisis" icon="sync" size="md" />
+    </div>
 
     <div class="q-pa-md">
 	    <q-table
 	    	flat bordered
 	    	size="lg"
-	      :rows="rows"
+	      :rows="analisis"
 	      :columns="columns"
 	      row-key="name"
 	      hide-pagination>
 	      <template v-slot:body="props">
 	      	<q-tr :props="props" @click="onRowClick(props.row)">
 	      		<q-td key="titulo" :props="props">
-            	{{ props.row.titulo }}
+            	{{ props.row.titulo || 'Sin titulo' }}
           	</q-td>
           	<q-td key="ubicacion" :props="props">
-            	{{ props.row.ubicacion }}
+            	{{ props.row.ubicacion || 'Sin ubicacion' }}
           	</q-td>
           	<q-td key="fecha" :props="props">
-            	{{ props.row.fecha }}
+            	{{ props.row.fecha || 'Sin fecha' }}
           	</q-td>
 		        <q-td key="estado" :props="props">
 		          <div>
@@ -29,9 +33,9 @@
 		      </q-tr>
       	</template>
 	    </q-table>
-	    <q-dialog 
-        v-model="modalDetalleResultado" 
-        maximized 
+	    <q-dialog
+        v-model="modalDetalleResultado"
+        maximized
         persistent
         transition-show="slide-up"
         transition-hide="slide-down"
@@ -145,8 +149,11 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from 'src/boot/firebase';
+import { ref, computed, onMounted } from 'vue'
 
+const analisis = ref([])
 const rowSelected = ref({})
 
 const modalDetalleResultado = ref(false)
@@ -231,4 +238,20 @@ const colorBadge = (estado) => {
 	if (estado == 'Malo') return 'red'
 	if (estado == 'Pendiente') return 'grey'
 }
+
+const fetchAnalisis = async () => {
+  try {
+    const analisisCollection = collection(db, 'analisis')
+    const analisisSnapshot = await getDocs(analisisCollection)
+    analisis.value = analisisSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+    console.log(analisis.value)
+    console.log(analisis.value[0].id)
+  } catch (error) {
+    console.error('Error getting documents: ', error)
+  }
+}
+
+onMounted(() => {
+  fetchAnalisis()
+})
 </script>

@@ -153,6 +153,7 @@ import { db } from 'src/boot/firebase';
 import { ref, computed, onMounted } from 'vue'
 
 const analisis = ref([])
+const analisisPendientes = computed(() => analisis.value.filter(analisis => analisis.estado === 'Pendiente'))
 const rowSelected = ref({})
 
 const modalDetalleResultado = ref(false)
@@ -178,7 +179,7 @@ const cancelarAnalisis = () => {
 
 const onRowClick = (row) => {
 	rowSelected.value = analisis.value.find(analisis => analisis.id === row.id)
-  console.log(rowSelected.value)
+  console.log(rowSelected.value.estado)
 	modalDetalleResultado.value=true
 }
 

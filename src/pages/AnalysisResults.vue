@@ -2,8 +2,7 @@
 	<div class="q-pa-md example-row-equal-width">
 
     <div class="flex justify-center">
-      <div class="q-my-md q-mx-sm text-h5 text-center">Resultados Detallados</div>
-      <q-btn flat square @click="fetchAnalisis" icon="sync" size="md" />
+      <div class="q-my-md q-mx-sm text-h5 text-center">Resultados</div>
     </div>
 
     <div class="q-pa-md">
@@ -84,7 +83,7 @@
                 <p class="text-weight-medium text-subtitle1">Resultado</p>
                 <div class="q-mb-lg">
                   <span>Ph</span>
-                  <q-linear-progress rounded size="20px" value="70%" color="green" class="q-mt-sm">
+                  <q-linear-progress rounded :indeterminate="rowSelected.estado == 'Pendiente'" size="20px" value="70%" color="grey" class="q-mt-sm">
                     <div class="absolute-full flex flex-center">
                       <q-badge color="white" text-color="black" label="9" />
                     </div>
@@ -153,7 +152,7 @@ import { db } from 'src/boot/firebase';
 import { ref, computed, onMounted } from 'vue'
 
 const analisis = ref([])
-const analisisPendientes = computed(() => analisis.value.filter(analisis => analisis.estado === 'Pendiente'))
+//const analisisPendientes = computed(() => analisis.value.filter(analisis => analisis.estado === 'Pendiente'))
 const rowSelected = ref({})
 
 const modalDetalleResultado = ref(false)
@@ -161,9 +160,9 @@ const modalConfirmDelete = ref(false)
 const modalConfirmCancel = ref(false)
 
 const columns = [
-  { name: 'titulo', align: 'center', label: 'Titulo', field: 'titulo' },
-  { name: 'ubicacion', align: 'center', label: 'Ubicacion', field: 'ubicacion' },
-  { name: 'fecha', align: 'center', label: 'Fecha', field: 'fecha' },
+  { name: 'titulo', align: 'center', label: 'Titulo', field: 'titulo', sortable: true },
+  { name: 'ubicacion', align: 'center', label: 'Ubicacion', field: 'ubicacion', sortable: true },
+  { name: 'fecha', align: 'center', label: 'Fecha', field: 'fecha', sortable: true },
   { name: 'estado', align: 'center', label: 'Estado', field: 'estado' }
 ]
 
@@ -193,7 +192,7 @@ const fetchAnalisis = async () => {
   try {
     const analisisCollection = collection(db, 'analisis')
     const analisisSnapshot = await getDocs(analisisCollection)
-    analisis.value = analisisSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+    analisis.value = analisisSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })).reverse()
   } catch (error) {
     console.error('Error getting documents: ', error)
   }

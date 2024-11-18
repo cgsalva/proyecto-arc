@@ -3,6 +3,7 @@
 
     <div class="flex justify-center">
       <div class="q-my-md q-mx-sm text-h5 text-center">Resultados</div>
+      <q-btn flat rounded @click="fetchAnalisis" class="q-mx-xs" icon="autorenew"/>
     </div>
 
     <div class="q-pa-md">
@@ -125,7 +126,7 @@
 
           <q-card-actions align="right">
             <q-btn flat label="CANCELAR" color="black" v-close-popup />
-            <q-btn flat label="SI" color="black" @click="eliminarRegistro()" v-close-popup />
+            <q-btn flat label="SI" color="black" @click="eliminarRegistro(rowSelected.id)" v-close-popup />
           </q-card-actions>
         </q-card>
       </q-dialog>
@@ -147,7 +148,7 @@
 </template>
 
 <script setup>
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
 import { db } from 'src/boot/firebase';
 import { ref, computed, onMounted } from 'vue'
 
@@ -166,8 +167,11 @@ const columns = [
   { name: 'estado', align: 'center', label: 'Estado', field: 'estado' }
 ]
 
-const eliminarRegistro = () => {
+const eliminarRegistro = async (id) => {
   alert('se eliminaria el registro')
+  //aqui se eliminará el registro de la base de datos
+  await deleteDoc(doc(db, 'analisis', id))
+  fetchAnalisis()
   modalDetalleResultado.value = false
 }
 

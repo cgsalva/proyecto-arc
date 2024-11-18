@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-md example-row-equal-width" v-if="pendiente == false">
-    <div class="q-my-md text-h5 text-center">Nuevo Análisis</div>
+    <div  class="q-my-md text-h5 text-center">Nuevo Análisis</div>
     <div align="center" class="q-pa-md">
       <div class="q-gutter-y-md column" style="max-width: 370px">
         <q-input class="q-mb-sm" dense v-model="titulo" label="TITULO">
@@ -23,11 +23,15 @@
             <q-icon name="event" />
           </template>
         </q-input>
-        <q-btn color="primary" icon="sync" label="INICIAR ANALISIS" @click="guardar" />
+        <q-btn color="primary" to="/analysis-results" icon="sync" label="INICIAR ANALISIS" @click="guardar" />
       </div>
     </div>
   </div>
   <div class="q-pa-md example-row-equal-width text-center" v-if="pendiente == true">
+    <div class="q-my-md text-h4 text-center">Hay un análisis pendiente</div>
+    <q-btn label="Analizar" to="/analysis-results" class="q-my-md text-h6 text-center" color="primary"/>
+  </div>
+  <!-- <div class="q-pa-md example-row-equal-width text-center" v-if="pendiente == true">
         <div class="q-my-md text-h6 text-center">Esperando Resultados</div>
         <div class="q-mt-md">
           <q-spinner-ios
@@ -36,30 +40,63 @@
             />
         </div>
     <q-btn class="q-mt-md" color="red" size="sm" icon="close" stack label="CANCELAR" @click="cancelar" />
-  </div>
+  </div> -->
 </template>
 
 <script setup>
-import { ref } from 'vue'
-
-const pendiente = ref(false)
+import { addDoc, collection, getDocs } from 'firebase/firestore';
+import { db } from 'src/boot/firebase';
+import { computed, onMounted, ref } from 'vue'
 
 const titulo = ref('')
 const descripcion = ref('')
 const fecha = ref('')
 const ubicacion = ref('')
+const pendiente = computed(() => analisis.value.some(analysis => analysis.estado === 'Pendiente'))
+const analisis = ref([])
 
-const guardar = () => {
+const guardar = async () => {
   if (titulo.value && descripcion.value && fecha.value && ubicacion.value) {
     /* Aqui iria codigo para guardar en la base de datos */
+    await addDoc(collection(db, 'analisis'), {
+      titulo: titulo.value,
+      descripcion: descripcion.value,
+      fecha: fecha.value,
+      ubicacion: ubicacion.value,
+      estado: 'Pendiente',
+      datos: {
+        ph: 0,
+        tds: 0,
+        turbidez: 0
+      }
+    })
+    titulo.value = ''
+    descripcion.value = ''
+    fecha.value = ''
+    ubicacion.value = ''
     pendiente.value = true
-    alert(`titulo: ${titulo.value}, descripcion: ${descripcion.value}, fecha: ${fecha.value}, ubicacion: ${ubicacion.value}`)
+    //alert(`titulo: ${titulo.value}, descripcion: ${descripcion.value}, fecha: ${fecha.value}, ubicacion: ${ubicacion.value}`)
   }
-  
+
 }
 
 const cancelar = () => {
   pendiente.value = false
 }
+
+const fetchAnalisis = async () => {
+  try {
+    const analisisCollection = collection(db, 'analisis')
+    const analisisSnapshot = await getDocs(analisisCollection)
+    analisis.value = analisisSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })).reverse()
+  } catch (error) {
+    console.error('Error getting documents: ', error)
+  }
+  console.log(pendiente.value)
+}
+
+onMounted(() => {
+  fetchAnalisis()
+})
 
 </script>

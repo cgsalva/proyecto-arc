@@ -3,7 +3,7 @@
     <h3 class="text-weight-light text-center">Análisis de Calidad del Agua</h3>
     <h4 class="text-weight-light text-center">Proyecto de Arquitectura de Computadoras 2024</h4>
     <div class="text-center">
-      <q-btn class="q-mx-xs" to="/new-analysis" icon="autorenew" color="dark" label="Iniciar analisis" outline />
+      <q-btn class="q-mx-xs" :to="pendiente ? '/analysis-results' : '/new-analysis'" icon="autorenew" color="dark" label="Iniciar analisis" outline />
       <q-btn class="q-mx-xs" icon="group" color="dark" label="Integrantes" outline @click="modalIntegrantes = true" />
     </div>
     <q-dialog v-model="modalIntegrantes">
@@ -62,8 +62,27 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from 'src/boot/firebase';
+import { computed, onMounted, ref } from 'vue'
 
 const modalIntegrantes = ref(false)
+const pendiente = ref(false)
+const analisis = ref([])
 
+const fetchAnalisis = async () => {
+  try {
+    const analisisCollection = collection(db, 'analisis')
+    const analisisSnapshot = await getDocs(analisisCollection)
+    analisis.value = analisisSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })).reverse()
+  } catch (error) {
+    console.error('Error getting documents: ', error)
+  }
+  pendiente.value = analisis.value.some(analysis => analysis.estado === 'Pendiente')
+  console.log(pendiente.value)
+}
+
+onMounted(() => {
+  fetchAnalisis()
+})
 </script>

@@ -3,7 +3,7 @@
 
     <div class="flex justify-center">
       <div class="q-my-md q-mx-sm text-h5 text-center">Resultados</div>
-      <q-btn flat rounded @click="fetchAnalisis" class="q-mx-xs" icon="autorenew"/>
+      <!-- <q-btn flat rounded @click="fetchAnalisis" class="q-mx-xs" icon="autorenew"/> -->
     </div>
 
     <div class="q-pa-md">
@@ -148,12 +148,14 @@
 </template>
 
 <script setup>
-import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
+import { collection, deleteDoc, doc } from 'firebase/firestore';
 import { db } from 'src/boot/firebase';
-import { ref, computed, onMounted } from 'vue'
+import { ref } from 'vue'
+import { useCollection } from 'vuefire';
 
-const analisis = ref([])
-//const analisisPendientes = computed(() => analisis.value.filter(analisis => analisis.estado === 'Pendiente'))
+//aqui se obtiene la coleccion de la base de datos, usando vuefire
+const analisis = useCollection(collection(db, 'analisis'))
+
 const rowSelected = ref({})
 
 const modalDetalleResultado = ref(false)
@@ -171,7 +173,6 @@ const eliminarRegistro = async (id) => {
   alert('se eliminaria el registro')
   //aqui se eliminará el registro de la base de datos
   await deleteDoc(doc(db, 'analisis', id))
-  fetchAnalisis()
   modalDetalleResultado.value = false
 }
 
@@ -192,17 +193,4 @@ const colorBadge = (estado) => {
 	if (estado == 'Pendiente') return 'grey'
 }
 
-const fetchAnalisis = async () => {
-  try {
-    const analisisCollection = collection(db, 'analisis')
-    const analisisSnapshot = await getDocs(analisisCollection)
-    analisis.value = analisisSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })).reverse()
-  } catch (error) {
-    console.error('Error getting documents: ', error)
-  }
-}
-
-onMounted(() => {
-  fetchAnalisis()
-})
 </script>

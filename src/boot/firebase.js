@@ -1,6 +1,8 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getFirestore } from 'firebase/firestore';
+import { VueFire } from "vuefire";
+
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -20,8 +22,14 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
 
-export default async ({  }) => {
-
+export default async ({ app }) => {
+  app.use(VueFire, {
+    // imported above but could also just be created here
+    firebaseApp,
+    modules: [
+      // we will see other modules later on
+    ],
+  })
 }
 
 

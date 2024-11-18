@@ -64,7 +64,7 @@
 <script setup>
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from 'src/boot/firebase';
-import { computed, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
 const modalIntegrantes = ref(false)
 const pendiente = ref(false)

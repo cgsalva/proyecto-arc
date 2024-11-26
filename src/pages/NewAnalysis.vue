@@ -27,11 +27,12 @@
       </div>
     </div>
   </div>
-  <div class="q-pa-md example-row-equal-width text-center" v-if="pendiente == true">
-    <div class="q-my-md text-h4 text-center">Hay un análisis pendiente</div>
-    <q-btn label="Analizar" to="/analysis-results" class="q-my-md text-h6 text-center" color="primary"/>
+  <div class="q-pt-lg example-row-equal-width text-center" v-if="pendiente == true">
+    <div class="q-my-md text-weight-regular text-h6 text-center">¡Actualmente se encuentra un análisis pendiente!</div>
+    <q-btn outline label="Ir a resultados" to="/analysis-results" color="black"/>
   </div>
-  <!-- <div class="q-pa-md example-row-equal-width text-center" v-if="pendiente == true">
+  <!--
+  <div class="q-pa-md example-row-equal-width text-center" v-if="pendiente == true">
         <div class="q-my-md text-h6 text-center">Esperando Resultados</div>
         <div class="q-mt-md">
           <q-spinner-ios
@@ -40,7 +41,8 @@
             />
         </div>
     <q-btn class="q-mt-md" color="red" size="sm" icon="close" stack label="CANCELAR" @click="cancelar" />
-  </div> -->
+  </div>
+-->
 </template>
 
 <script setup>
@@ -57,7 +59,6 @@ const analisis = ref([])
 
 const guardar = async () => {
   if (titulo.value && descripcion.value && fecha.value && ubicacion.value) {
-    /* Aqui iria codigo para guardar en la base de datos */
     await addDoc(collection(db, 'analisis'), {
       titulo: titulo.value,
       descripcion: descripcion.value,
@@ -65,19 +66,16 @@ const guardar = async () => {
       ubicacion: ubicacion.value,
       estado: 'Pendiente',
       datos: {
-        ph: 0,
-        tds: 0,
-        turbidez: 0
+        ph: '',
+        tds: '',
+        turbidez: ''
       }
     })
     titulo.value = ''
     descripcion.value = ''
     fecha.value = ''
     ubicacion.value = ''
-    pendiente.value = true
-    //alert(`titulo: ${titulo.value}, descripcion: ${descripcion.value}, fecha: ${fecha.value}, ubicacion: ${ubicacion.value}`)
   }
-
 }
 
 const cancelar = () => {

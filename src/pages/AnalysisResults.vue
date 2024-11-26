@@ -57,27 +57,27 @@
             <div class="row q-px-xl">
               <div class="col q-px-md q-pb-lg">
                 <p class="text-weight-regular text-h6">Datos de registro</p>
-                <table>
+                <table width="100%">
                   <tbody>
                     <tr>
-                      <td><b>Titulo: </b></td>
-                      <td>{{rowSelected.titulo}}</td>
+                      <td width="30%" height="30px"><b>Titulo: </b></td>
+                      <td width="70%">{{rowSelected.titulo}}</td>
                     </tr>
 
                     <tr>
-                      <td><b>Descripcion: </b></td>
+                      <td height="30px"><b>Descripcion: </b></td>
                       <td>{{rowSelected.descripcion}}</td>
                     </tr>
                     <tr>
-                      <td><b>Fecha: </b></td>
+                      <td height="30px"><b>Fecha: </b></td>
                       <td>{{rowSelected.fecha}}</td>
                     </tr>
                     <tr>
-                      <td><b>Ubicacion: </b></td>
+                      <td height="30px"><b>Ubicacion: </b></td>
                       <td>{{rowSelected.ubicacion}}</td>
                     </tr>
                     <tr>
-                      <td><b>Estado: </b></td>
+                      <td height="30px"><b>Estado: </b></td>
                       <td><q-badge :color="colorBadge(rowSelected.estado)" :label="rowSelected.estado" /></td>
                     </tr>
                   </tbody>
@@ -87,7 +87,8 @@
                 </div>
                 <div class="q-mt-lg" v-if="rowSelected.estado != 'Pendiente'">
                     <q-btn icon="delete" class="q-mr-xs" size="sm" label="ELIMINAR" color="red" @click="modalConfirmDelete=true" />
-                </div>
+                    <q-btn color="primary" icon="print" size="sm" label="IMPRIMIR" @click="imprimir()" />
+                </div>   
               </div>
               <div class="col-12 col-md-7 q-px-md q-pb-lg">
                 <p class="text-weight-regular text-h6">Resultado</p>
@@ -275,5 +276,7 @@ const colorBarraTDS = (valor) => {
   if (valor >= 600 && valor <= 900) return 'green'
   if (valor > 900) return 'red'
 }
+
+const imprimir = () => print()
 
 </script>

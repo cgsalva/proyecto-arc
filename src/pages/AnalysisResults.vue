@@ -88,7 +88,7 @@
                 <div class="q-mt-lg" v-if="rowSelected.estado != 'Pendiente'">
                     <q-btn icon="delete" class="q-mr-xs" size="sm" label="ELIMINAR" color="red" @click="modalConfirmDelete=true" />
                     <q-btn color="primary" icon="print" size="sm" label="IMPRIMIR" @click="imprimir()" />
-                </div>   
+                </div>
               </div>
               <div class="col-12 col-md-7 q-px-md q-pb-lg">
                 <p class="text-weight-regular text-h6">Resultado</p>
@@ -96,10 +96,10 @@
                 <!-- Barra PH -->
                 <div class="q-mb-xl">
                   <span>Ph (0 - 14)</span>
-                  <q-linear-progress 
-                    class="q-mt-sm" size="20px" rounded 
-                    :indeterminate="rowSelected.estado == 'Pendiente'" 
-                    :value="(rowSelected.datos.ph/14)*100+'%'" 
+                  <q-linear-progress
+                    class="q-mt-sm" size="20px" rounded
+                    :indeterminate="rowSelected.estado == 'Pendiente'"
+                    :value="(rowSelected.datos.ph/14)*100+'%'"
                     :color="colorBarraPh(rowSelected.datos.ph)"
                   >
                     <div v-show="rowSelected.estado != 'Pendiente'" class="absolute-full flex flex-center">
@@ -116,10 +116,10 @@
                 <!-- Barra TURBIDEZ -->
                 <div class="q-mb-xl">
                   <span>Turbidez (0 - 1000)</span>
-                  <q-linear-progress 
+                  <q-linear-progress
                     class="q-mt-sm" size="20px" rounded
-                    :indeterminate="rowSelected.estado == 'Pendiente'" 
-                    :value="(rowSelected.datos.turbidez/1000)*100+'%'" 
+                    :indeterminate="rowSelected.estado == 'Pendiente'"
+                    :value="(rowSelected.datos.turbidez/1000)*100+'%'"
                     :color="colorBarraTurbidez(rowSelected.datos.turbidez)"
                   >
                     <div v-show="rowSelected.estado != 'Pendiente'" class="absolute-full flex flex-center">
@@ -136,10 +136,10 @@
                 <!-- Barra TDS -->
                 <div class="q-mb-xl">
                   <span>TDS (0 - 2000)</span>
-                  <q-linear-progress 
+                  <q-linear-progress
                     class="q-mt-sm" size="20px" rounded
-                    :indeterminate="rowSelected.estado == 'Pendiente'" 
-                    :value="(rowSelected.datos.tds/2000)*100+'%'" 
+                    :indeterminate="rowSelected.estado == 'Pendiente'"
+                    :value="(rowSelected.datos.tds/2000)*100+'%'"
                     :color="colorBarraTDS(rowSelected.datos.tds)"
                   >
                     <div v-show="rowSelected.estado != 'Pendiente'" class="absolute-full flex flex-center">
@@ -192,7 +192,7 @@
           </q-card-actions>
         </q-card>
       </q-dialog>
-      
+
       <q-dialog v-model="modalInfoPh" transition-show="rotate" transition-hide="rotate">
       <q-card>
         <q-card-section>
@@ -209,7 +209,7 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
-  
+
 	  </div>
 	</div>
 </template>
@@ -217,7 +217,7 @@
 <script setup>
 import { collection, deleteDoc, doc } from 'firebase/firestore';
 import { db } from 'src/boot/firebase';
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useCollection } from 'vuefire';
 
 const filter = ref('')
@@ -237,6 +237,18 @@ const columns = [
   { name: 'fecha', align: 'center', label: 'Fecha', field: 'fecha', sortable: true },
   { name: 'estado', align: 'center', label: 'Estado', field: 'estado' }
 ]
+
+watch(analisis, (newAnalisis) => {
+  if (rowSelected.value?.id) {
+    const updatedRow = newAnalisis.find(item => item.id === rowSelected.value.id);
+    if (updatedRow) {
+      rowSelected.value = updatedRow; // Actualiza si el registro seleccionado existe en los datos nuevos
+    } else {
+      rowSelected.value = {}; // Si el registro fue eliminado, limpia la selección
+    }
+  }
+}, { deep: true }); // Reactividad profunda para observar cambios en la colección
+
 
 const eliminarRegistro = async (id) => {
   await deleteDoc(doc(db, 'analisis', id))

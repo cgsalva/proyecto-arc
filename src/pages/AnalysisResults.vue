@@ -279,4 +279,11 @@ const colorBarraTDS = (valor) => {
 
 const imprimir = () => print()
 
+const resumenPh = (valor) => {
+  if (valor < 3) return `Un pH de ${valor} indica que el agua es muy ácida. Un pH menor a 3 es corrosivo y puede dañar tuberías, equipos y, sobre todo, afectar severamente a la flora, fauna y la salud humana si se consume o entra en contacto con ella.`
+  if (valor >= 3 && valor < 6.5) return `Un pH de ${valor} indica que el agua es ácida. puede causar corrosión en tuberías y afectar su sabor, además de liberar metales tóxicos como plomo o cobre en el agua potable.`
+  if (valor >= 6.5 && valor <= 8.5) return `Un pH de ${valor} indica que el agua es neutra. indica un equilibrio perfecto entre ácido y alcalino, sin predominancia de ninguno.`
+  if (valor > 8.5) return `dggfsd`
+}
+
 </script>

@@ -103,7 +103,7 @@
                     :color="colorBarraPh(rowSelected.datos.ph)"
                   >
                     <div v-show="rowSelected.estado != 'Pendiente'" class="absolute-full flex flex-center">
-                      <q-badge color="white" text-color="black" :label="'pH '+rowSelected.datos.ph" />
+                      <q-badge color="white" text-color="black" :label="'pH '+(rowSelected.datos.ph ? rowSelected.datos.ph.toFixed(2) : '')" />
                     </div>
                   </q-linear-progress>
                   <div class="text-center">
@@ -123,7 +123,7 @@
                     :color="colorBarraTurbidez(rowSelected.datos.turbidez)"
                   >
                     <div v-show="rowSelected.estado != 'Pendiente'" class="absolute-full flex flex-center">
-                      <q-badge color="white" text-color="black" :label="rowSelected.datos.turbidez+' NTU'" />
+                      <q-badge color="white" text-color="black" :label="(rowSelected.datos.turbidez ? rowSelected.datos.turbidez.toFixed(2) : '')+' NTU'" />
                     </div>
                   </q-linear-progress>
                   <div class="text-center">
@@ -143,7 +143,7 @@
                     :color="colorBarraTDS(rowSelected.datos.tds)"
                   >
                     <div v-show="rowSelected.estado != 'Pendiente'" class="absolute-full flex flex-center">
-                      <q-badge color="white" text-color="black" :label="rowSelected.datos.tds+' mg/L'" />
+                      <q-badge color="white" text-color="black" :label="(rowSelected.datos.tds ? rowSelected.datos.tds.toFixed(2) : '')+' mg/L'" />
                     </div>
                   </q-linear-progress>
                   <div class="text-center">
@@ -154,10 +154,21 @@
                 </div>
 
                 <!-- MENSAJE -->
-                <q-card class="bg-green text-white">
+                <q-card class="text-white" :class="colorBgResumen(rowSelected.estado)">
                   <q-card-section>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                    tempor incididunt ut labore et dolore magna aliqua.
+                    <span><b>Resumen:</b></span>
+                    <ul v-if="rowSelected.estado != 'Pendiente'">
+                      <li class="q-mb-lg">{{ resumenPh(rowSelected.datos.ph) }}</li>
+                      <li class="q-mb-lg">{{ resumenTurbidez(rowSelected.datos.turbidez) }}</li>
+                      <li>{{ resumenTDS(rowSelected.datos.tds) }}</li>
+                    </ul>
+                    <div class="text-center" v-if="rowSelected.estado == 'Pendiente'">
+                      <q-spinner-hourglass
+                        color="white"
+                        size="3em"
+                      />
+                      <div>Esperando Resultados</div>
+                    </div>
                   </q-card-section>
                 </q-card>
 
@@ -192,7 +203,7 @@
           </q-card-actions>
         </q-card>
       </q-dialog>
-
+      <!-- 
       <q-dialog v-model="modalInfoPh" transition-show="rotate" transition-hide="rotate">
       <q-card>
         <q-card-section>
@@ -209,7 +220,7 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
-
+-->
 	  </div>
 	</div>
 </template>
@@ -289,13 +300,42 @@ const colorBarraTDS = (valor) => {
   if (valor > 900) return 'red'
 }
 
+const colorBgResumen = (estado) => {
+  if (estado == 'Pendiente') return 'bg-grey-6'
+  if (estado == 'Bueno') return 'bg-green'
+  if (estado == 'Malo') return 'bg-red'
+  if (estado == 'Regular') return 'bg-orange-7'
+}
+
 const imprimir = () => print()
 
 const resumenPh = (valor) => {
+  if (valor == '') return ''
+  valor = valor.toFixed(2)
   if (valor < 3) return `Un pH de ${valor} indica que el agua es muy ácida. Un pH menor a 3 es corrosivo y puede dañar tuberías, equipos y, sobre todo, afectar severamente a la flora, fauna y la salud humana si se consume o entra en contacto con ella.`
   if (valor >= 3 && valor < 6.5) return `Un pH de ${valor} indica que el agua es ácida. puede causar corrosión en tuberías y afectar su sabor, además de liberar metales tóxicos como plomo o cobre en el agua potable.`
   if (valor >= 6.5 && valor <= 8.5) return `Un pH de ${valor} indica que el agua es neutra. indica un equilibrio perfecto entre ácido y alcalino, sin predominancia de ninguno.`
-  if (valor > 8.5) return `dggfsd`
+  if (valor > 8.5) return `Un pH de ${valor} indica que el agua es alcalina o básica. Esto puede deberse a varias causas, entre las cuales se incluyen: Altos niveles de minerales alcalinos, productos químicos, desechos industriales o presencia de algas. Un pH alto puede tener implicaciones para la salud humana y para los ecosistemas acuáticos. `
+}
+
+const resumenTurbidez = (valor) => {
+  if (valor == '') return ''
+  valor = valor.toFixed(2)
+  if (valor < 1) return `Una turbidez de ${valor} es un indicador de excelente calidad y suele estar asociada con un agua altamente limpia y transparente. Esto implica que contiene muy pocas partículas en suspensión, lo cual es especialmente importante en el contexto de agua potable y procesos sensibles que requieren agua de alta calidad.`
+  if (valor >= 1 && valor < 3) return `Una turbidez de ${valor} indica que el agua tiene baja concentración de partículas en suspensión, como arcilla, limo, materia orgánica, microorganismos, y otras impurezas. Esto es un indicador positivo, es adecuada para consumo o uso según los estándares de calidad`
+  if (valor >= 3 && valor <= 5) return `Una turbidez de ${valor} indica que el agua contiene una cantidad moderada de partículas en suspensión, Aunque es aceptable en ciertos contextos, como el agua potable según algunos estándares básicos, puede no ser ideal en términos de sabor o eficacia de desinfección.`
+  if (valor > 5 && valor <= 10) return `Una turbidez de ${valor} indica una concentración significativa de partículas en suspensión que afecta negativamente su calidad. Este nivel de turbidez suele ser inaceptable para el consumo humano según los estándares internacionales y puede tener implicaciones importantes dependiendo del uso del agua.`
+  if (valor > 10) return `Una turbidez de ${valor} indica una alta concentración de partículas en suspensión, lo que la hace claramente turbia y no apta para el consumo humano ni para muchos otros usos sensibles. Este nivel sugiere problemas significativos relacionados con contaminación o alteraciones ambientales.`
+}
+
+const resumenTDS = (valor) => {
+  if (valor == '') return ''
+  valor = valor.toFixed(2)
+  if (valor < 300) return `Un TDS de ${valor} indica que el agua tiene un contenido muy bajo de sólidos disueltos, se considera agua de muy alta calidad para el consumo humano.`
+  if (valor >= 300 && valor < 600) return `Un TDS de ${valor} indica que el agua tiene un contenido bajo de sólidos disueltos, este nivel suele asociarse con agua de sabor agradable y suficiente contenido mineral para ser saludable`
+  if (valor <= 600 && valor < 900) return `Un TDS de ${valor} indica que el agua contiene una cantidad moderada de sólidos disueltos, como minerales, sales, y posiblemente compuestos orgánicos. puede no ser ideal para beber debido a su sabor más mineralizado y la posible presencia de contaminantes o excesos de ciertos minerales`
+  if (valor >= 900 && valor < 1200) return `Un TDS de ${valor} indica que el agua contiene una cantidad elevada de sólidos disueltos, como minerales, sales, metales o compuestos orgánicos. puede contener excesos de ciertos minerales (como cloruros o sulfatos) o incluso contaminantes que podrían ser dañinos, suele tener un sabor notablemente salado, amargo o metálico, dependiendo de los compuestos presentes.`
+  if (valor > 1200) return `Un TDS de ${valor} en el agua indica una concentración muy alta de sólidos disueltos, como minerales, sales, metales pesados o compuestos orgánicos. Este nivel suele asociarse con problemas significativos para su uso en consumo humano, agricultura e industria.`
 }
 
 </script>

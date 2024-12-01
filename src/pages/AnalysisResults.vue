@@ -157,6 +157,7 @@
                 <q-card class="text-white" :class="colorBgResumen(rowSelected.estado)">
                   <q-card-section>
                     <span><b>Resumen:</b></span>
+                    <p>{{rowSelected.datos.ph}}, {{rowSelected.datos.turbidez}}, {{rowSelected.datos.tds}}</p>
                     <ul v-if="rowSelected.estado != 'Pendiente'">
                       <li class="q-mb-lg">{{ resumenPh(rowSelected.datos.ph) }}</li>
                       <li class="q-mb-lg">{{ resumenTurbidez(rowSelected.datos.turbidez) }}</li>
@@ -296,7 +297,7 @@ const colorBarraTurbidez = (valor) => {
 const colorBarraTDS = (valor) => {
   if (valor == '') return 'grey-5'
   if (valor < 600) return 'green'
-  if (valor >= 600 && valor <= 900) return 'green'
+  if (valor >= 600 && valor <= 900) return 'orange'
   if (valor > 900) return 'red'
 }
 
@@ -333,7 +334,7 @@ const resumenTDS = (valor) => {
   valor = valor.toFixed(2)
   if (valor < 300) return `Un TDS de ${valor} indica que el agua tiene un contenido muy bajo de sólidos disueltos, se considera agua de muy alta calidad para el consumo humano.`
   if (valor >= 300 && valor < 600) return `Un TDS de ${valor} indica que el agua tiene un contenido bajo de sólidos disueltos, este nivel suele asociarse con agua de sabor agradable y suficiente contenido mineral para ser saludable`
-  if (valor <= 600 && valor < 900) return `Un TDS de ${valor} indica que el agua contiene una cantidad moderada de sólidos disueltos, como minerales, sales, y posiblemente compuestos orgánicos. puede no ser ideal para beber debido a su sabor más mineralizado y la posible presencia de contaminantes o excesos de ciertos minerales`
+  if (valor >= 600 && valor < 900) return `Un TDS de ${valor} indica que el agua contiene una cantidad moderada de sólidos disueltos, como minerales, sales, y posiblemente compuestos orgánicos. puede no ser ideal para beber debido a su sabor más mineralizado y la posible presencia de contaminantes o excesos de ciertos minerales`
   if (valor >= 900 && valor < 1200) return `Un TDS de ${valor} indica que el agua contiene una cantidad elevada de sólidos disueltos, como minerales, sales, metales o compuestos orgánicos. puede contener excesos de ciertos minerales (como cloruros o sulfatos) o incluso contaminantes que podrían ser dañinos, suele tener un sabor notablemente salado, amargo o metálico, dependiendo de los compuestos presentes.`
   if (valor > 1200) return `Un TDS de ${valor} en el agua indica una concentración muy alta de sólidos disueltos, como minerales, sales, metales pesados o compuestos orgánicos. Este nivel suele asociarse con problemas significativos para su uso en consumo humano, agricultura e industria.`
 }

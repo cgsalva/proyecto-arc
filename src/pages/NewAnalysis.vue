@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-md example-row-equal-width" v-if="pendiente == false">
-    <div  class="q-my-md text-h5 text-center">Nuevo Análisis</div>
+    <div  class="q-my-md text-h5 text-center text-grey-10">Nuevo Análisis</div>
     <div align="center" class="q-pa-md">
       <div class="q-gutter-y-md column" style="max-width: 370px">
         <q-input class="q-mb-sm" dense v-model="titulo" label="TITULO">

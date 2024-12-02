@@ -2,7 +2,7 @@
 	<div class="q-pa-md example-row-equal-width">
 
     <div class="flex justify-center">
-      <div class="q-my-md q-mx-sm text-h5 text-center">Resultados</div>
+      <div class="q-my-md q-mx-sm text-h5 text-center text-grey-10">Resultados</div>
     </div>
 
     <div class="q-pa-md">
@@ -50,13 +50,13 @@
         >
         <q-card style="">
           <q-toolbar>
-            <q-toolbar-title class="text-h5 text-center">Detalle del resultado</q-toolbar-title>
+            <q-toolbar-title class="text-h5 text-center text-grey-10">Detalle del resultado</q-toolbar-title>
             <q-btn flat v-close-popup round dense size="sm" icon="close" />
           </q-toolbar>
           <q-card-section class="scroll q-pb-lg">
             <div class="row q-px-xl">
               <div class="col q-px-md q-pb-lg">
-                <p class="text-weight-regular text-h6">Datos de registro</p>
+                <p class="text-weight-regular text-h6 text-grey-10">Datos de registro</p>
                 <table width="100%">
                   <tbody>
                     <tr>
@@ -91,7 +91,7 @@
                 </div>
               </div>
               <div class="col-12 col-md-7 q-px-md q-pb-lg">
-                <p class="text-weight-regular text-h6">Resultado</p>
+                <p class="text-weight-regular text-h6 text-grey-10">Resultado</p>
 
                 <!-- Barra PH -->
                 <div class="q-mb-xl">
@@ -157,7 +157,6 @@
                 <q-card class="text-white" :class="colorBgResumen(rowSelected.estado)">
                   <q-card-section>
                     <span><b>Resumen:</b></span>
-                    <p>{{rowSelected.datos.ph}}, {{rowSelected.datos.turbidez}}, {{rowSelected.datos.tds}}</p>
                     <ul v-if="rowSelected.estado != 'Pendiente'">
                       <li class="q-mb-lg">{{ resumenPh(rowSelected.datos.ph) }}</li>
                       <li class="q-mb-lg">{{ resumenTurbidez(rowSelected.datos.turbidez) }}</li>

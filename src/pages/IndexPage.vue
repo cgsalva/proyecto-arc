@@ -1,20 +1,19 @@
 <template>
-  <div class="q-pa-md example-row-equal-width">
+  <div class="q-pa-md example-row-equal-width text-grey-10">
     <h3 class="text-weight-light text-center">Análisis de Calidad del Agua</h3>
     <h4 class="text-weight-light text-center">Proyecto de Arquitectura de Computadoras 2024</h4>
     <div class="text-center">
-      <q-btn class="q-mx-xs" :to="pendiente ? '/analysis-results' : '/new-analysis'" icon="autorenew" color="dark" label="Iniciar analisis" outline />
-      <q-btn class="q-mx-xs" icon="group" color="dark" label="Integrantes" outline @click="modalIntegrantes = true" />
+      <q-btn class="q-mx-xs" :to="pendiente ? '/analysis-results' : '/new-analysis'" icon="autorenew" color="grey-10" label="Iniciar analisis" outline />
+      <q-btn class="q-mx-xs" icon="group" color="grey-10" label="Integrantes" outline @click="modalIntegrantes = true" />
     </div>
     <q-dialog v-model="modalIntegrantes">
-      <q-card style="width: 400px; max-width: 80vw;">
+      <q-card style="width: 450px; max-width: 80vw;">
         <q-toolbar>
           <q-toolbar-title>Integrantes</q-toolbar-title>
           <q-btn flat v-close-popup round dense icon="close" />
         </q-toolbar>
-        <q-separator />
-        <q-card-section class="q-pt-md scroll" style="max-height: 80vh">
-          <table width="100%" class="text-center">
+        <q-card-section class="scroll" style="max-height: 80vh">
+          <table width="100%" class="text-left q-ma-md">
             <thead>
               <tr>
                 <th>Apellidos</th>
